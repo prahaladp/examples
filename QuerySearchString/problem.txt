@@ -1,9 +1,0 @@
-Write a program that answers YES/NO search queries containing * placeholders. Example: if the data you have is (hazem, ahmed, moustafa, fizo), then you should answer as follows for: 
- ahmed: YES 
- m**stafa: YES 
- fizoo: NO 
- fizd: NO 
- *****: YES 
- ****: YES  
-**: NO 
- Your program should be able to answer each search query in O(1).
