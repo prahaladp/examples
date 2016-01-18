@@ -1,0 +1,3 @@
+697 Given a string S, you are allowed to convert it to a palindrome by adding 0 or more characters in front of it.    
+698 Find the length of the shortest palindrome that you can create from S by applying the above transformation.
+

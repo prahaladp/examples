@@ -1,0 +1,6 @@
+Given a number "n", find the least number of perfect square numbers sum needed to get "n"
+
+Example:
+n=12, return 3 (4 + 4 + 4) = (2^2 + 2^2 + 2^2) NOT (3^2 + 1 + 1 + 1)
+n = 6, return 3 (4 + 1 + 1) = (2^2 + 1^2 + 1^2)
+

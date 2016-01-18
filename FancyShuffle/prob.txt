@@ -1,0 +1,6 @@
+ 92 Write a function
+ 93 bool fancy_shuffle(char* s);
+ 94 
+ 95 which rearranges characters in the string given as input, in such a way that no same character occurs twice in a row (that is, next     to each other).
+ 96 If such rearrangement is not possible, the function should return false.
+
