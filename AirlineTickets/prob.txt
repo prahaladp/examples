@@ -1,0 +1,4 @@
+Given an bunch of airline tickets with [from, to], for example [MUC, LHR], [CDG, MUC], [SFO, SJC], [LHR, SFO], please reconstruct the itinerary in order,
+for example: [ CDG, MUC, LHR, SFO, SJC ].
+//tickets can be represented as nodes
+

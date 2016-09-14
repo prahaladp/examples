@@ -1,0 +1,14 @@
+0 1 ?
+? wildcard for 0 or 1
+
+"01?"
+010 011
+
+Example:
+01?0?
+Will produce
+01000
+01100
+01001
+01101
+

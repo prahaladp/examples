@@ -1,0 +1,12 @@
+Write a basic function that returns the starting bit position of a 32 bit pattern (i.e. 0xFE6B2840) within a provided byte array. 
+For example: Input 1 = [ 0x00 0x01 0xFE 0x6b 0x28 0x40 0x02 0x03 ....] 
+< Starting position is here at bit 16 
+Result 1 = 16 
+
+Note: The bit pattern could be non-byte aligned. 
+Input 2 = [ 0x00 0x03 0xFC 0xD6 0x50 0x80 0x04 0x06] 
+< Starting position is bit 15 
+Result 2 = 15
+
+
+

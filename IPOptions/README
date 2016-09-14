@@ -1,0 +1,143 @@
+Adding and removing IP Options from a packet
+--------------------------------------------
+
+The APIs for this is provided as a library which can then be linked as required. The APIs are
+defined in ipoptions.h
+
+The primary APIs are :
+	int ip_add_custom_option(pkt_t *pkt, custom_opt_t *opt, error_t *err);
+	int ip_remove_custom_option(pkt_t *pkt, custom_opt_t *opt, error_t *err);
+
+The parameters are:
+	pkt_t	- pointer to a packet structure which contains a buffer and length
+	custom_opt_t	- this is the custom option which needs to be inserted
+	err_t	- this holds any error message from the APIs
+
+Return Values:
+	Both the APIs return an integer result value:
+
+	O 	indicates success
+	non-0	indicates failure and the caller can look into the error_t structure to get the
+		actual error encountered.
+
+	In case of ip_add_custom_option(..), the original pkt is freed and a new pkt is created.
+	The pkt->msg points to the new IP packet which has been created.
+
+	In case of ip_remove_custom_option(..), the IP packet is rearranged within the provided
+	pkt_t structure.
+
+Header Files:
+	The header file is provided in ipoptions.h
+	This header file contains the function definition as well as other helper
+	structures like ip_t among others. The primary reason for including ip_t is for
+	platform-independence and to be able to run this module without any other dependencies.
+	It is possible to run this by referencing netinet/ip.h etc if needed.
+
+	The other interesting structures which are useful are :
+		typedef struct ip_opt_s {
+		        uint8_t code;               /* IPOPT_TS */
+		        uint8_t len;                /* size of structure (variable) */
+		        /* variable size data */
+		} ip_opt_t;
+
+		typedef struct pkt_s {
+		        void    *msg;
+		        int     len;
+		} pkt_t;
+
+		typedef struct error_s {
+		        char    emsg[80];
+		        int     ecode;
+		} error_t;
+
+		typedef struct custom_opt_s {
+		        int     code;
+		        int     len;
+		        char    opt[32];
+		} custom_opt_t;
+
+Sample usage:
+	Assume the caller has a IP packet, this packet would be referenced by pkt_t.
+	The caller then creates a custom_opt_t parameter and passes this to the required routine
+
+	#include "ipoption.h"
+
+	opt.code = CUSTOM_IP_OPT;
+        strncpy(opt.opt, "Special Option", sizeof (opt.opt));
+        opt.len = strlen("Special Option");
+
+	res = ip_add_custom_option(pkt, &opt, &err);
+	if (res) {
+		/* reference the error message */
+	}
+
+	Similarly for remove :
+	res = ip_remove_custom_option(pkt, &opt, &err);
+
+Assumptions:
+	These routines do not handle IP fragments - it is assumed that the IP fragments are
+	handled by other layers in the protocol. For example, once the pkt_t with the new
+	custom option is provided to the fragmentation layer which would then break the fragment
+	into multiple pieces - and each piece could have the options set/unset depending
+	on how the option is specified (as per the RFC)
+
+	Assumes that the caller holds the lock to the pkt buffer and it has been serialized.
+
+
+Tests:
+	Please refer to test.c to see how to use as well testing for this module
+
+	The tests provide the output as shown below and runs through a series of tests
+	excercising the module.
+
+		Test case : creating packet, appending IP option
+		Test case : checking new header len
+		Test case : testing new packet len
+		Test case : checking ip checksum
+		Test case : comparing payload
+		Test case : remove option
+		Test case : comparing packet len after removing options
+		Test case : comparing packet contents after removing options
+		Test case : creating packet, appending IP option
+		Test case : checking new header len
+		Test case : testing new packet len
+		Test case : checking ip checksum
+		Test case : comparing payload
+		Test case : remove option
+		Test case : comparing packet len after removing options
+		Test case : comparing packet contents after removing options
+		Test case : creating packet, appending IP option
+		Test case : checking new header len
+		Test case : testing new packet len
+		Test case : checking ip checksum
+		Test case : comparing payload
+		Test case : remove option
+		Test case : comparing packet len after removing options
+		Test case : comparing packet contents after removing options
+
+Compilation:
+	One way to compile and run the tests is as shown below :
+	# cc -g -o test ipoption.c test.c
+	# ./test
+
+Running with pcap:
+        To compile with pcap
+        # cc -lsocket -lnsl -lpcap -g -o pcap pcap.c ipoption.c
+       
+        To run with pcap,
+        # ./pcap
+        Usage : <pcap> add/remove <device>
+
+        #./pcap add eth0
+        got packet
+        00000   95 00 02 60 00 bb 00 00  01 11 36 dc 0a 09 09 9a    ...`......6.....
+        00016   00 00 00 00 0a 0f 53 70  65 63 69 61 6c 20 4f 70    ......Special Op
+        00032   74 69 6f 6e ef 04 09 07  5b 46 5b 67 02 38 00 00    tion....[F[g.8..
+        00048   00 00 00 00 00 00 55 3d  03 00 00 00 30 02 00 00    ......U=....0...
+        00064   06 00 00 bb 31 35 30 36  4b 4a 39 30 30 30 30 31    ....1506KJ900001
+        00080   34 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00    4...............
+        00096   00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00    ................
+
+        This inserts string 'Special Option' in the IP header as shown in the 
+        output above.
+ 
