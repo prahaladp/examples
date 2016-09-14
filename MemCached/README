@@ -1,0 +1,87 @@
+Information about the Memcached Server implementation
+-----------------------------------------------------
+
+NOTES:
+- This is an implementation based on the problem noted in the document here (./doc/Problem.pdf)
+- The memcached has been implemented in python (since that is the language I was most comfortable with and it also provides sufficient language primitives to handle some of the common socket/threading/synchronization functionality)
+
+GITHUB:
+    - Also available on github here : 
+
+INSTALLATION
+- untar the attached file to access the sources/test/documentation
+- tar -xzvf MemCached.tar.gz
+
+FILES
+The files are organized as follows
+- README (this file in the root directory)
+- docs (contain some documentation on the implementation)
+- src (contains the main source files for the server)
+- test (contains some unit testing)
+
+DESIGN
+- The design is outlined in the document ./docs/Pipeline.{pptx, pdf}. For better performance, the processing pipeline for memcached has been split into two asynchronous parts. The first part is handling the incoming socket transactions (accept/read/close), which are handled by the built in python libraries - this schedules async callbacks as and when the events occur, thus ensuring good performance. This async thread then submits a 'task' to the DB worker threads. The worker threads are assigned to each client when they complete the socket binding - this allows the client requests to be processed in the order they are received and at the same time, it allows clients to be fanned out to multiple threads for better parallelism and DB performance. While locking is needed for protecing access to data structures, it should also be noted that some of the native python data structures (dictionaries, queues etc) are inherently thread safe and that provide additional protection (and reduces the programmer error)
+
+CODE
+- The code is organized into the classes which mimic the pipeline outlined in the previous section. Memcached represents the main service object which listens for incoming requests. It also creates a MemcacheDB object which creates the ThreadPool, worker threads and initialized the DB. ClientMemCacheConn represents a client connection and it has a ProtocolBuffer object which stores and processes the incoming request. The incoming requests are packaged as Tasks and assigned to a queue. These Tasks are then picked up by the Consumers, the requests parsed and handled to relevant DbOperations. The DbOperation perform the required client operation before sending a response back to the client with the relevant details.
+
+INSTALLATION/RUNNING
+- To run the memcached service, 
+	- cd ./src
+	- python memcached.py
+- The service runs in the foreground and emits logging periodically. Refer to the logging section on the logging from the service
+- To stop the service, CTRL-C
+
+TESTING
+NOTE - these tests run on local hosts only except for stress testing which can specify the remote server.
+- Simple use cases:
+	- start python shell (python)
+	- 	>>> s=socket.socket();s.connect((host, 11211))
+		>>> s.send('set key2 flags exptime 10\r\n1234567880\r\n');b=s.recv(100); print b
+			39
+			STORED
+		>>> s.close()
+
+- Unit testing:
+	- some basic functional testing has been provided with automated test cases.
+	- cd ./test
+	- python functional.py
+		This runs through few unit test cases
+		2016-09-13 23:47:42,971 - root - DEBUG - test case 1
+		2016-09-13 23:47:42,971 - root - DEBUG - test - add key
+		2016-09-13 23:47:42,990 - root - DEBUG - received response STORED
+		...
+		2016-09-13 23:47:43,001 - root - DEBUG - read the large key
+		2016-09-13 23:47:43,004 - root - DEBUG - large key recieved = 20026
+		2016-09-13 23:47:43,004 - root - DEBUG - test case 6 succeeded
+
+- Protocol testing:
+    - basic tests around some of the failure conditions which are handled in the server.
+    - python proto-tests.py
+        2016-09-14 11:20:52,073 - root - DEBUG - test case 1
+        2016-09-14 11:20:52,073 - root - DEBUG - test - set key
+        2016-09-14 11:20:52,074 - root - DEBUG - received response STORED
+        ...
+        2016-09-14 11:20:52,080 - root - DEBUG - test case 5
+        2016-09-14 11:20:52,080 - root - DEBUG - get with multiple keys
+        2016-09-14 11:20:52,081 - root - DEBUG - received response VALUE key2 flags 10
+        1234567890
+
+        2016-09-14 11:20:52,081 - root - DEBUG - test case 5 succeeded
+
+- Stress testing
+	- to test the scale and performance of the service, run this test
+	- cd test
+	- python concurrent.py  10 1000
+		This will create 10 threads which will issues 1000 requests in parallel to the DB (it performs set and get operations) on the DB, with random data sizes. The parameters can be tweaked as necessary.
+
+TEST ENVIRONMENT
+- The code has been tested on MacBookPro (including the automated tests shown above along with other negative test cases)
+
+LOGGING
+- The service also provides logging, the logs are stored in service.log in the running directory. The same information is also spit out on the console when the service is running.
+
+FUTURE WORK
+- More test cases and performance improvements
+		
+
