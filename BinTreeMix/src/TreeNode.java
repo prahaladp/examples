@@ -1,3 +1,6 @@
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class TreeNode {
@@ -65,6 +68,18 @@ public class TreeNode {
       }    
     }
     
+    int rootCount = 0;
+    for (TreeNode key : tMap.keySet()) {
+      Integer value = tMap.get(key);
+      if (value == 0) {
+        if (rootCount != 0) {
+          System.out.println("Multiple roots found for this tree node set");
+          return Boolean.FALSE;
+        }
+        rootCount = 1;
+      }
+  }
+    
     return Boolean.TRUE;
   }
   
@@ -98,7 +113,18 @@ public class TreeNode {
     tArr[3] = new TreeNode(9, null, null);
     tArr[2] = new TreeNode(10, tArr[1], tArr[3]);
     if (TreeNode.checkValidTree(tArr) != Boolean.FALSE) {
-      System.out.println("TestCase 2 failed");
+      System.out.println("TestCase 3 failed");
+      System.exit(1);
+    }
+    
+    System.out.println("TestCase 4");
+    tArr = new TreeNode[4];
+    tArr[0] = new TreeNode(3, null, null);
+    tArr[1] = new TreeNode(5, tArr[0], null);
+    tArr[2] = new TreeNode(10, tArr[1], tArr[3]);
+    tArr[3] = new TreeNode(15, null, null);
+    if (TreeNode.checkValidTree(tArr) != Boolean.FALSE) {
+      System.out.println("TestCase 4 failed");
       System.exit(1);
     }
   }
