@@ -1,2 +1,9 @@
 *.out
 *.swp
+*.project
+*.classpath
+*.DS_STORE
+*.gitignore
+*.gitattributes
+**/bin
+
