@@ -1,4 +1,6 @@
 class MagicDictionary(object):
+    # https://leetcode.com/problems/implement-magic-dictionary/description/
+    
     dictionary = []
 
     def __init__(self):
