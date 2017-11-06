@@ -1,4 +1,6 @@
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.function.Supplier;
 
 public class Node
@@ -141,6 +143,13 @@ public class Node
   }
   
   public static void main(String[] args) {
-    Node.testcase1();
+    // Node.testcase1();
+    List<String> cList = Arrays.asList("a", "b", "c");
+    List<String> eList = Arrays.asList("e", "a");
+    
+    System.out.println("Contains : " + eList.contains("a"));
+    System.out.println("Contains : " + eList.contains("e"));
+    cList.stream().filter(cName -> eList.contains(cName) == false).forEach(cName -> System.out.println("cname " + cName));
+    
   }
 }
