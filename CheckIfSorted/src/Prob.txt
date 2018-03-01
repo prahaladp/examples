@@ -1,0 +1,11 @@
+Give the following input, output if the array is sorted according to the ordering array given. Return true or false. 
+Input: 
+words = ['cc', 'cb', 'bb', 'ac'] 
+ordering = ['c', 'b', 'a'] 
+Output: True 
+
+Input: 
+words = ['cc', 'cb', 'bb', 'ac'] 
+[bb cb cc ac] 
+ordering = ['b', 'c', 'a'] 
+Output: False

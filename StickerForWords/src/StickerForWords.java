@@ -151,6 +151,12 @@ public class StickerForWords {
    * @param args
    */
   public static void main(String args[]) {
+    
+    Map<String, Integer> keyMap = new HashMap<>();
+    Integer val = keyMap.computeIfAbsent("1", k -> 0);
+    keyMap.put("1", 100);
+    val = keyMap.computeIfAbsent("1", k -> 0);;
+    
     StickerForWords sW = new StickerForWords();
     
     System.out.println(sW.minStickers(new String[]{"with", "example", "science"},
