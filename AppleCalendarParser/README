@@ -1,0 +1,15 @@
+# Parses the ICAL contents and dumps the time taken
+# To run
+#   change to top-level directory and run the following
+
+caldir=`ls | grep calendar`
+for c in $caldir; do
+    cd $c 
+    typ=`cat Info.plist | grep -A 1 "<key>Title</key>" | tail -n -1 |sed -e 's/<s.*>\([A-Za-z]*\)<\/s.*/\1/g'`
+    cd Events
+    icsfiles=`find . -name "*.ics"`
+    python calendar_parser.py $typ $icsfiles
+    cd ..
+    cd ..
+done
+
