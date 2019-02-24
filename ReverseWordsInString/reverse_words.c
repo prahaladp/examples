@@ -32,7 +32,12 @@ reverse(char *s) {
     char    *ws = s;
     char    *we = s;
 
+    s = remove_spaces(s);
+    ws = s;
+    we = s;
+    printf("trimmed = %s<\n", s);
     reverse_parts(s, e - 1);
+    printf("reversed = %s<\n", s);
 
     /* start breaking */
     while (ws < e) {
@@ -58,7 +63,8 @@ main(int argc, char *argv[]) {
     str[0] = '\0';
     strcpy(str, "two words");
     printf("reversing : two words : %s\n", reverse(str));
-    str[1] = '\0';
+    str[2] = '\0';
+    str[1] = '1';
     str[0] = ' ';
-    printf("reversing :   : %s\n", reverse(str));
+    printf("reversing :   : %si<\n", reverse(str));
 }
