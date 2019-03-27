@@ -32,23 +32,26 @@ reverse(char *s) {
     char    *ws = s;
     char    *we = s;
 
-    s = remove_spaces(s);
+    if (remove_spaces(ws) >= e) {
+            *s = '\0';
+            return s;
+        }
+    
+    s = remove_spaces(ws);
     ws = s;
     we = s;
-    printf("trimmed = %s<\n", s);
     reverse_parts(s, e - 1);
-    printf("reversed = %s<\n", s);
 
     /* start breaking */
     while (ws < e) {
-        ws = remove_spaces(ws);
-        if (ws >= e) {
-            break;
+            ws = remove_spaces(ws);
+            if (ws >= e) {
+                        break;
+                    }
+            we = find_next_space(ws + 1);
+            reverse_parts(ws, we - 1);
+            ws = remove_spaces(we);
         }
-        we = find_next_space(ws + 1);
-        reverse_parts(ws, we - 1);
-        ws = remove_spaces(we);
-    }
     return s;
 }
 
@@ -66,5 +69,5 @@ main(int argc, char *argv[]) {
     str[2] = '\0';
     str[1] = '1';
     str[0] = ' ';
-    printf("reversing :   : %si<\n", reverse(str));
+    printf("reversing :   : %si %d\n", reverse(str), strlen(reverse(str)));
 }
