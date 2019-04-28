@@ -4,34 +4,33 @@ class Solution(object):
         :type s: str
         :rtype: str
         """
-        l = len(s)
-        ml = 0
-        ans = ''
-        for i in range(0, l):
-            j = l-1
-            while j >= i:
-                e = self.checkPalin(s, i, j)
-                if e != -1:
-                    if e - i + 1 > ml:
-                        ans = s[i:e+1]
-                        ml = e - i + 1
-                j -= 1
-        return ans
-    
-    def checkPalin(self, s, st, l):
-        print st, l
-        e = l
-        os = st
-        while l >= st:
-            print 'comparing ', s[l], s[st]
-            if s[l] != s[st]:
-                return -1
-            st += 1
-            l -= 1
-        print st, e, s[os:e+1]
-        return e
-                        
+        st=0
+        en=0
+        ml=1
+        n=len(s)
+        mat=[]
+        for i in range(n+1):
+            x = [0 for i in range(n+1)]
+            mat.append(x)
+
+        for l in range(n):
+            for i in range(n+1):
+                if l == 0:
+                    mat[i][i] = 1
+                elif i+l < n:
+                    if s[i] == s[i+l]:
+                        if l == 1 or mat[i+1][i+l-1] == 1:
+                            mat[i][i+l]=1
+                            if l >= ml:
+                                ml=l
+                                st=i
+                                en=i+l
+                    else:
+                        mat[i][i+l]=0
+        return s[st:en+1]
+
 s = Solution()
 #print s.longestPalindrome("babad")
-print s.longestPalindrome("cbbd")
-print s.longestPalindrome("a")
+#print s.longestPalindrome("cbbd")
+#print s.longestPalindrome("a")
+print s.longestPalindrome("caba")
