@@ -30,7 +30,9 @@ class Solution(object):
         return s[st:en+1]
 
 s = Solution()
-#print s.longestPalindrome("babad")
+print s.longestPalindrome("babad")
 #print s.longestPalindrome("cbbd")
 #print s.longestPalindrome("a")
 print s.longestPalindrome("caba")
+print s.longestPalindrome("bbab")
+print s.longestPalindrome("bbadb")
