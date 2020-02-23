@@ -14,6 +14,24 @@ class Solution {
 		}
 	}
 	
+	public interface TestInterface {
+		public class Args {
+			int	t;
+			public Args(int tval) {
+				t = tval;
+			}
+		}
+	}
+	
+	public class TestClass {
+		public class Args {
+			int	t;
+			public Args(int tval) {
+				t = tval;
+			}
+		}
+	}
+	
 	public String compareWord(String q, String w) {
 		int indx = 0;
 		
@@ -73,6 +91,10 @@ class Solution {
     		return results.stream().toArray(String[]::new);
     }
     
+    public static class TestStaticClass {
+    	
+    }
+    
     public static void main(String[] args) {
     		//String[] wordlist = {"KiTe","kite","hare","Hare"};
     		//String[] queries = {"kite","Kite","KiTe","Hare","HARE","Hear","hear","keti","keet","keto"};
@@ -81,10 +103,12 @@ class Solution {
     		String[] queries = {"Zeo", "nAe", "kOe"};
     		Solution s = new Solution();
     		
-    		String[] ans =  s.spellchecker(wordlist, queries);
-    		System.out.println("Matching = " + String.join(",", Arrays.asList(ans)));
+    		// String[] ans =  s.spellchecker(wordlist, queries);
+    		//System.out.println("Matching = " + String.join(",", Arrays.asList(ans)));
     		
     		//["kite","KiTe","KiTe","Hare","hare","","","KiTe","","KiTe"]
     		//System.out.println(s.compareWord("Kite", "KiTe"));
+    		
+    		TestInterface.Args tArgs = new TestInterface.Args(1);
     }
 }
