@@ -2,7 +2,12 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 
 class Solution {
 	class Result {
@@ -109,6 +114,15 @@ class Solution {
     		//["kite","KiTe","KiTe","Hare","hare","","","KiTe","","KiTe"]
     		//System.out.println(s.compareWord("Kite", "KiTe"));
     		
-    		TestInterface.Args tArgs = new TestInterface.Args(1);
+    		// TestInterface.Args tArgs = new TestInterface.Args(1);
+    		
+    		Instant i = Instant.now();
+    		String dt = i.toString();
+    		System.out.println("instant to date is  " + dt);
+    		//LocalDateTime localDateTime = LocalDateTime.parse(dt, DateTimeFormatter.ISO_INSTANT);
+    		// LocalDate localDate = LocalDate.parse("2011-12-03T10:15:30Z", DateTimeFormatter.ISO_INSTANT);
+    		//LocalDate localDate = LocalDate.from(DateTimeFormatter.ISO_INSTANT.parse("2020-06-04T05:15:32.380"));
+    		// ZonedDateTime zonedDate = ZonedDateTime.parse("2011-12-03T10:15:30Z", DateTimeFormatter.ISO_INSTANT);
+    		Instant ni = Instant.parse(dt);
     }
 }
